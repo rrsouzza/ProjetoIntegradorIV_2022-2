@@ -12,14 +12,19 @@ exe_path = GeckoDriverManager().install()
 service=Service(exe_path)
 browser = webdriver.Firefox(service=service)
 
-# WRITE CSV
-def write_csv(date,tweet,name):
-    with open("twitterData.csv", "a+") as csv_file:
-        fieldnames = ['Date', 'Name', 'Tweets','Tags']
-        writer = DictWriter(csv_file, fieldnames=fieldnames)
-        #writer.writeheader()
-        writer.writerow({'Date': date,'Name': name,'Tweets': tweet})
-# --------------------
+# Essa função pode ser utilizada para exportar para CSV caso seja necessário 
+''' 
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │ # WRITE CSV                                                              │
+  │ def write_csv(date,tweet,name):                                          │
+  │     with open("twitterData.csv", "a+") as csv_file:                      │
+  │         fieldnames = ['Date', 'Name', 'Tweets','Tags']                   │
+  │         writer = DictWriter(csv_file, fieldnames=fieldnames)             │
+  │         #writer.writeheader()                                            │
+  │         writer.writerow({'Date': date,'Name': name,'Tweets': tweet})     │
+  │ # --------------------                                                   │
+  └──────────────────────────────────────────────────────────────────────────┘
+ '''
 
 # usuario = input("Usuário do Twitter: ")
 # senha = input("Senha do Twitter: ")
@@ -61,7 +66,8 @@ except Exception as excpt:
 
 # BUSCA AVANÇADA
 try:
-    browser.get("https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20candidato%20OR%20candidatos%20OR%20presidente)%20since%3A2022-01-01%20-filter%3Alinks&src=typed_query")
+    url_busca_avancada = "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20candidato%20OR%20candidatos%20OR%20presidente)%20since%3A2022-01-01%20-filter%3Alinks&src=typed_query"
+    browser.get(url_busca_avancada)
     print("Iniciou a busca avançada")
     sleep(6)
 except Exception as excpt:
