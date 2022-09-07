@@ -1,0 +1,11 @@
+TERM FREQUENCY (TF) ->
+
+A frequência de cada palavra em cada documento. É a proporção do número de vezes que uma palavra aparece em um documento, em relação ao número total de palavras naquele documento. Cada documento possui seu próprio TF.
+
+INVERSE DATA FREQUENCY (IDF) ->
+
+Usado para calcular o peso de palavras raras através de todos os documentos no escopo analisado. As palavras que aparecem raramente no escopo possui uma pontuação alta de IDF. 
+
+TF - IDF ->
+
+Combinação de TF e IDF, o qual define uma pontuação TF-IDF para uma palavra, em um documento, em um escopo.
