@@ -13,18 +13,6 @@ service=Service(exe_path)
 browser = webdriver.Firefox(service=service)
 # browser = webdriver.Chrome(service=service)
 
-URLS_Pesquisa = [
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-01-31%20since%3A2022-01-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-02-28%20since%3A2022-02-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-03-31%20since%3A2022-03-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-04-30%20since%3A2022-04-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-05-31%20since%3A2022-05-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-06-30%20since%3A2022-06-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-07-31%20since%3A2022-07-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-08-31%20since%3A2022-08-01&src=typed_query",
-    "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A2022-09-06%20since%3A2022-09-01&src=typed_query"
-]
-
 Meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro"]
 
 def busca_avancada(url):
@@ -79,6 +67,9 @@ def gerador_url_diaria(mes):
     return urls
 # --------------------
 
+mes_escolhido = 8
+URLS_Pesquisa = gerador_url_diaria(mes_escolhido)
+
 
 # Essa função pode ser utilizada para exportar para CSV caso seja necessário 
 ''' 
@@ -132,8 +123,10 @@ except Exception as excpt:
     exit(1)
 # --------------------
 
+dia_atual = 0
 for url in URLS_Pesquisa:
     busca_avancada(url)
+    dia_atual += 1
 
     try:
         index = 0
@@ -147,7 +140,7 @@ for url in URLS_Pesquisa:
                 obj = BeautifulSoup(tweet_divs, "html.parser")
                 
                 try:
-                    content = obj.find_all("div", {"data-testid": "cellInnerDiv"})
+                    content = (obj.find_all("div", {"data-testid": "cellInnerDiv"}))
                     # content = browser.find_element(by=By.XPATH, value="//div[contains(@data-testid,'cellInnerDiv')]")
                     
                     for c in content:
@@ -155,15 +148,17 @@ for url in URLS_Pesquisa:
                             try:
                                 aux = c
                                 tweets = c.find("div", {"data-testid": "tweetText"}).strings
-                                tweet_text = "".join(tweets)
+                                tweet_text = str("".join(tweets).encode("utf-8"))
                                 print(tweet_text)
                                 print("-----------")
                                 index += 1
 
                                 try:
                                     # WRITE TO .TXT
-                                    file_name = f"tweet_{Meses[URLS_Pesquisa.index(url)]}_{index}.txt"
-                                    myfile = open(f"tweets/{file_name}", 'w')
+                                    # file_name = f"tweet_{Meses[URLS_Pesquisa.index(url)]}_{index}.txt"
+                                    file_name = f"{dia_atual}-0{mes_escolhido}--tweet_{index}.txt"
+                                    absolute_path = "C:/Users/Ricardo/Desktop/FAESA/Projeto Integrador IV/C1"
+                                    myfile = open(f"{absolute_path}/tweets/{file_name}", 'w')
                                     myfile.write(tweet_text)
 
                                     # WRITE TO CSV
@@ -171,7 +166,7 @@ for url in URLS_Pesquisa:
                                         # csv_file.write(tweet_text)
 
                                 except Exception as e:
-                                    print(f"Tivemos uma falha: {e}")
+                                    print(f"Falha no write_to_txt: {e}")
                                 finally:
                                     # SCROLL DOWN
                                     browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")

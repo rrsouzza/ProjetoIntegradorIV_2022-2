@@ -12,8 +12,8 @@ if os.path.exists("tweets.csv"):
 f = open("tweets.csv", "x")
 
 # Abre a pasta tweets, lê todos os arquivos com a extensão txt e faz um csv:
-with open('tweets.csv', 'a') as csv_file:
-    for path in glob.glob('./tweets/*.txt'):
+with open(file='tweets.csv', mode='a', encoding='utf-8') as csv_file:
+    for path in glob.glob('./C1/tweets/*.txt'):
         with open(path) as txt_file:
             txt = txt_file.read() + '\n'
             csv_file.write(txt)
@@ -21,7 +21,7 @@ with open('tweets.csv', 'a') as csv_file:
 # Criação do dataframe:
 df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
 df = df.drop_duplicates()
-# df_csv = df.to_csv('tweets_drop_duplicates.csv')
+df_csv = df.to_csv('tweets_drop_duplicates.csv')
 cv = CountVectorizer()
 
 # Realização do TF:
