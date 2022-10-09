@@ -148,7 +148,7 @@ for url in URLS_Pesquisa:
                             try:
                                 aux = c
                                 tweets = c.find("div", {"data-testid": "tweetText"}).strings
-                                tweet_text = str("".join(tweets).encode("utf-8"))
+                                tweet_text = "".join(tweets)
                                 print(tweet_text)
                                 print("-----------")
                                 index += 1
@@ -157,9 +157,9 @@ for url in URLS_Pesquisa:
                                     # WRITE TO .TXT
                                     # file_name = f"tweet_{Meses[URLS_Pesquisa.index(url)]}_{index}.txt"
                                     file_name = f"{dia_atual}-0{mes_escolhido}--tweet_{index}.txt"
-                                    absolute_path = "C:/Users/Ricardo/Desktop/FAESA/Projeto Integrador IV/C1"
-                                    myfile = open(f"{absolute_path}/tweets/{file_name}", 'w')
-                                    myfile.write(tweet_text)
+                                    absolute_path = "./tweets"
+                                    with open(f"{absolute_path}/{file_name}", 'w') as f:
+                                        f.write(tweet_text)
 
                                     # WRITE TO CSV
                                     # with open('tweets-teste.csv', 'w') as csv_file:

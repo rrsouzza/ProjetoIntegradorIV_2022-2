@@ -1,8 +1,24 @@
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
+from sklearn.cluster import KMeans
 import pandas as pd
 import glob
 import os
 import numpy as np
+
+def checkIfFileExists():
+    index = 1
+    exists = True
+    newFileName = ''
+    while (exists == True):
+        exists = os.path.exists(f'./df_valorado/df_valorado_{index}.csv')
+        if (exists == True):
+             index += 1
+        else:
+            newFileName = f'./df_valorado/df_valorado_{index}.csv'
+    return newFileName
+# --------------------
+
+# INÍCIO ----->
 
 # Apagar se o arquivo existe:
 if os.path.exists("tweets.csv"):
@@ -38,10 +54,26 @@ idf.sort_values(by=['IDF'])
 print(idf)
 
 # Realização do TF-IDF:
-count_vector = cv.transform(df) 
+count_vector = cv.transform(df)
 tf_idf_vector = idf_transformer.transform(count_vector)
 feature_names = cv.get_feature_names_out()
 first_document_vector = tf_idf_vector[0]
 tfidf = pd.DataFrame(first_document_vector.T.todense(), index=feature_names, columns=["TF-IDF"]) 
 tfidf.sort_values(by=["TF-IDF"],ascending=False)
 print(tfidf)
+
+tf_idf_vectorizer = TfidfVectorizer()
+X = tf_idf_vectorizer.fit_transform(df.iloc[:, 0])
+
+# K-Means
+kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
+
+teste = kmeans.predict(tf_idf_vectorizer.transform(df.iloc[:, 0]))
+print(teste)
+
+df_valorado = pd.DataFrame(data = {'Texto': df.iloc[:, 0], 'Valor': teste})
+df_valorado = df_valorado.sort_values(by=['Valor'])
+df_valorado = df_valorado.reset_index(drop=True)
+print(df_valorado)
+
+df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
