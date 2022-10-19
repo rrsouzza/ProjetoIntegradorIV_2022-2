@@ -114,7 +114,7 @@ with open('tweets.txt', 'w') as tweets_file:
         try:
             last_height = 0
             aux = ''
-            for i in range(1, 10):
+            for i in range(1, 2):
                 
                 # SCRAPING
                 try:
@@ -131,13 +131,14 @@ with open('tweets.txt', 'w') as tweets_file:
                                     aux = c
                                     tweets = c.find("div", {"data-testid": "tweetText"}).strings
                                     tweet_text = "".join(tweets)
-                                    print(tweet_text)
+                                    print(tweet_text.rstrip())
                                     print("-----------")
                                     index += 1
 
                                     try:
                                         # WRITE TO .TXT
-                                        tweets_file.write(f"{index}-{tweet_text.rstrip()};\n")
+                                        tweet_text = tweet_text.rstrip()
+                                        tweets_file.write(f"{index}-{tweet_text};\n")
                                     except Exception as e:
                                         print(f"Falha no write_to_txt: {e}")
                                     finally:
