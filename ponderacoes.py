@@ -6,6 +6,10 @@ import glob
 import os
 import numpy as np
 
+# 0 = Neutro
+# 1 = Positivo
+# 2 = Negativo
+
 def checkIfFileExists():
     index = 1
     exists = True
@@ -26,6 +30,21 @@ def find_between(string, first, last):
         return string[start:end]
     except ValueError:
         return ""
+# --------------------
+
+def export_separate_data():
+    # Exportar dados separados
+    df_kmeans = pd.read_csv('./kmeans_manual/3ª Avaliação/df_original-0-0.csv', sep=';', index_col=0)
+    print(f'df_kmeans: {df_kmeans}')
+
+    df_kmeans0 = df_kmeans.loc[df_kmeans['Valor'] == 0]
+    df_kmeans0.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-0.csv', sep=';', index=True)
+
+    df_kmeans1 = df_kmeans.loc[df_kmeans['Valor'] == 1]
+    df_kmeans1.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-1.csv', sep=';', index=True)
+
+    df_kmeans2 = df_kmeans.loc[df_kmeans['Valor'] == 2]
+    df_kmeans2.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-2.csv', sep=';', index=True)
 # --------------------
 
 
@@ -169,7 +188,10 @@ with open('tweets.txt') as txt_file:
 # --------------------
 
 # Criação do dataframe:
-df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
+
+# df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
+df = pd.read_csv('./kmeans_manual/1ª Avaliação/0.csv', sep=';', index_col=0)
+
 df = df.drop_duplicates()
 # df_csv = df.to_csv('tweets_drop_duplicates.csv')
 cv = CountVectorizer()
@@ -205,6 +227,8 @@ X = tf_idf_vectorizer.fit_transform(df.iloc[:, 0])
 
 # K-Means
 kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
+
+# export_separate_data()
 
 line_for_csv = kmeans.predict(tf_idf_vectorizer.transform(df.iloc[:, 0]))
 print(line_for_csv)
