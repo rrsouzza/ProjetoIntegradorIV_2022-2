@@ -1,3 +1,4 @@
+import csv
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
 from sklearn.cluster import KMeans
 import pandas as pd
@@ -18,6 +19,16 @@ def checkIfFileExists():
     return newFileName
 # --------------------
 
+def find_between(string, first, last):
+    try:
+        start = string.index(first) + len(first)
+        end = string.index(last, start)
+        return string[start:end]
+    except ValueError:
+        return ""
+# --------------------
+
+
 # INÍCIO ----->
 
 # Apagar se o arquivo existe:
@@ -33,9 +44,10 @@ with open('tweets.txt') as txt_file:
         if (not line.__len__() >= 2):
             lines.pop(index)
         
-    with open('tweets.csv', 'x') as csv_parsed:
+    with open('tweets.csv', 'x', newline='', encoding='UTF-8') as csv_parsed:
         length = len(lines)
         index = 0
+        all_lines = ['']
         while (index <= length):
             try:
                 current_line = lines[index].rstrip()
@@ -121,19 +133,45 @@ with open('tweets.txt') as txt_file:
                 final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line}'
                 index = index + 8
 
-            csv_parsed.write(f'{final_line}\n')
+            if len(final_line) > 2:
+                all_lines.append(f'{final_line}')
             
             # print(f'final_line: {final_line}')
             # print(f'index: {index}')
 
             if (final_line == '' and next_first_line == '' and next_second_line == '' and next_third_line == '' and next_fourth_line == '' and next_fifth_line == '' and next_sixth_line == '' and next_seventh_line == ''):
                 break
+        # ---- while
+        
+        indice = 1
+        all_lines.pop(0)
+        # Remove o primeiro elemento vazio inserido na hora da inicialização
+
+        writer = csv.writer(csv_parsed)
+        for line in all_lines:
+            # text_between_double_quotes = find_between(line, '"', '"')
+            # if text_between_double_quotes != '':
+            #     line = line.replace(text_between_double_quotes, f'"{text_between_double_quotes}"')
+
+            tweet_index = f'{indice}-'
+            if line.startswith(tweet_index):
+                line = line.replace(tweet_index, '')
+
+            if line.endswith(';'):
+                line = line[:-1]
+
+            all_lines[indice - 1] = line
+            line_for_csv = [line]
+            # csv_parsed.write(f'{line}\n')
+            writer.writerow(line_for_csv)
+            
+            indice += 1
 # --------------------
 
 # Criação do dataframe:
 df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
 df = df.drop_duplicates()
-df_csv = df.to_csv('tweets_drop_duplicates.csv')
+# df_csv = df.to_csv('tweets_drop_duplicates.csv')
 cv = CountVectorizer()
 # --------------------
 
@@ -168,10 +206,10 @@ X = tf_idf_vectorizer.fit_transform(df.iloc[:, 0])
 # K-Means
 kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
 
-teste = kmeans.predict(tf_idf_vectorizer.transform(df.iloc[:, 0]))
-print(teste)
+line_for_csv = kmeans.predict(tf_idf_vectorizer.transform(df.iloc[:, 0]))
+print(line_for_csv)
 
-df_valorado = pd.DataFrame(data = {'Texto': df.iloc[:, 0], 'Valor': teste})
+df_valorado = pd.DataFrame(data = {'Texto': df.iloc[:, 0], 'Valor': line_for_csv})
 df_valorado = df_valorado.sort_values(by=['Valor'])
 df_valorado = df_valorado.reset_index(drop=True)
 print(df_valorado)
