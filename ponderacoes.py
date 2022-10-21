@@ -34,17 +34,17 @@ def find_between(string, first, last):
 
 def export_separate_data():
     # Exportar dados separados
-    df_kmeans = pd.read_csv('./kmeans_manual/3ª Avaliação/df_original-0-0.csv', sep=';', index_col=0)
+    df_kmeans = pd.read_csv('./kmeans_manual/3ª Avaliação/df_original-2-2.csv', sep=';', index_col=0)
     print(f'df_kmeans: {df_kmeans}')
 
     df_kmeans0 = df_kmeans.loc[df_kmeans['Valor'] == 0]
-    df_kmeans0.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-0.csv', sep=';', index=True)
+    df_kmeans0.to_csv('./kmeans_manual/3ª Avaliação/2-2-0.csv', sep=';', index=True)
 
     df_kmeans1 = df_kmeans.loc[df_kmeans['Valor'] == 1]
-    df_kmeans1.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-1.csv', sep=';', index=True)
+    df_kmeans1.to_csv('./kmeans_manual/3ª Avaliação/2-2-1.csv', sep=';', index=True)
 
-    df_kmeans2 = df_kmeans.loc[df_kmeans['Valor'] == 2]
-    df_kmeans2.to_csv('./kmeans_manual/3ª Avaliação/kmeans/0-0-2.csv', sep=';', index=True)
+    # df_kmeans2 = df_kmeans.loc[df_kmeans['Valor'] == 2]
+    # df_kmeans2.to_csv('./kmeans_manual/3ª Avaliação/2-1-2.csv', sep=';', index=True)
 # --------------------
 
 
@@ -190,7 +190,7 @@ with open('tweets.txt') as txt_file:
 # Criação do dataframe:
 
 # df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
-df = pd.read_csv('./kmeans_manual/1ª Avaliação/0.csv', sep=';', index_col=0)
+df = pd.read_csv('./kmeans_manual/3ª Avaliação/2-2-1.csv', sep=';', index_col=0)
 
 df = df.drop_duplicates()
 # df_csv = df.to_csv('tweets_drop_duplicates.csv')
@@ -238,5 +238,6 @@ df_valorado = df_valorado.sort_values(by=['Valor'])
 df_valorado = df_valorado.reset_index(drop=True)
 print(df_valorado)
 
-df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
+# df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
+df_valorado.to_csv('./kmeans_manual/3ª Avaliação/kmeans/2-2-1.csv', sep=';', index=True)
 # --------------------
