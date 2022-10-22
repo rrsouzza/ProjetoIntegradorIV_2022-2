@@ -10,6 +10,7 @@ import numpy as np
 # 1 = Positivo
 # 2 = Negativo
 
+# Essa função verifica se já existe um arquivo chamado df_valorado*index*. Assim sempre salva como df_valorado_1, df_valorado_2, etc.
 def checkIfFileExists():
     index = 1
     exists = True
@@ -23,7 +24,10 @@ def checkIfFileExists():
     return newFileName
 # --------------------
 
+# Essa função procura e retorna o texto entre duas strings/caracteres dentro de uma string.
+# Pode ser usada para, por exemplo, retornar o texto que esteja dentro de aspas ""
 def find_between(string, first, last):
+    # Exemplo -> 
     try:
         start = string.index(first) + len(first)
         end = string.index(last, start)
@@ -32,19 +36,27 @@ def find_between(string, first, last):
         return ""
 # --------------------
 
+# Essa função pega um .csv que contenha tweets valorados pelo k-means com 0, 1 e 2, e salva cada valor separadamente em um .csv.
 def export_separate_data():
-    # Exportar dados separados
+    
+    # Lê o .csv escolhido, salva num DataFrame
     df_kmeans = pd.read_csv('./kmeans_manual/3ª Avaliação/df_original-2-2.csv', sep=';', index_col=0)
     print(f'df_kmeans: {df_kmeans}')
 
+    # Seleciona todas as linhas que possuam valor 0 na coluna Valor, e armazena em outro DataFrame
     df_kmeans0 = df_kmeans.loc[df_kmeans['Valor'] == 0]
+    # Exporta o DataFrame para um .csv
     df_kmeans0.to_csv('./kmeans_manual/3ª Avaliação/2-2-0.csv', sep=';', index=True)
 
+    # Seleciona todas as linhas que possuam valor 1 na coluna Valor, e armazena em outro DataFrame
     df_kmeans1 = df_kmeans.loc[df_kmeans['Valor'] == 1]
+    # Exporta o DataFrame para um .csv
     df_kmeans1.to_csv('./kmeans_manual/3ª Avaliação/2-2-1.csv', sep=';', index=True)
 
-    # df_kmeans2 = df_kmeans.loc[df_kmeans['Valor'] == 2]
-    # df_kmeans2.to_csv('./kmeans_manual/3ª Avaliação/2-1-2.csv', sep=';', index=True)
+    # Seleciona todas as linhas que possuam valor 2 na coluna Valor, e armazena em outro DataFrame
+    df_kmeans2 = df_kmeans.loc[df_kmeans['Valor'] == 2]
+    # Exporta o DataFrame para um .csv
+    df_kmeans2.to_csv('./kmeans_manual/3ª Avaliação/2-1-2.csv', sep=';', index=True)
 # --------------------
 
 
@@ -55,18 +67,28 @@ if os.path.exists('tweets.csv'):
     os.remove('tweets.csv')
 # --------------------
 
-# Abre o arquivo tweets, lê linha por linha, organiza os tweets no csv:
+# Abre o arquivo tweets:
 with open('tweets.txt') as txt_file:
-    # lines = txt_file.read().splitlines(keepends=True)
+    # Lê todas as linhas do .txt dos tweets
     lines = txt_file.readlines()
+    # Percorre todas as linhas do .txt e elimina as linhas que não possuem texto
     for index, line in enumerate(lines):
         if (not line.__len__() >= 2):
             lines.pop(index)
         
+    # Abre o arquivo onde será salvo um tweet por linha
     with open('tweets.csv', 'x', newline='', encoding='UTF-8') as csv_parsed:
         length = len(lines)
         index = 0
         all_lines = ['']
+
+        # O código a seguir funciona da seguinte maneira:
+        # A cada loop, ele lê a linha_atual (current_line), a proxima_primeira_linha (next_first_line), a proxima_segunda_linha (next_second_line), até a proxima_setima_linha.
+        # Assim o código lida com o caso onde um tweet possui quebras de linha, e ocupa mais de uma linha.
+        # O código procura pelo caractere ';' no final de cada linha, que é o limitador do final do texto de um tweet.
+        # Assim, a cada loop, ao ler as próximas 8 linhas, ele define em qual linha o tweet termina, e copia todo esse texto para a string_final (final_line)
+        # No final, verifica se todas as linhas atuais estão vazias, e se positivo, encerra o loop.
+
         while (index <= length):
             try:
                 current_line = lines[index].rstrip()
@@ -167,20 +189,27 @@ with open('tweets.txt') as txt_file:
         # Remove o primeiro elemento vazio inserido na hora da inicialização
 
         writer = csv.writer(csv_parsed)
+        
+        # Percorre todas as linhas preparadas para salvar no .csv
         for line in all_lines:
             # text_between_double_quotes = find_between(line, '"', '"')
             # if text_between_double_quotes != '':
             #     line = line.replace(text_between_double_quotes, f'"{text_between_double_quotes}"')
 
+            # Remove os números iniciais de cada linha ('1-', '2-', '3-', etc)
             tweet_index = f'{indice}-'
             if line.startswith(tweet_index):
                 line = line.replace(tweet_index, '')
 
+            # Remove o ';' do final de cada linha
             if line.endswith(';'):
                 line = line[:-1]
 
+            # Substitui a linha no array pela linha modificada
             all_lines[indice - 1] = line
             line_for_csv = [line]
+            
+            # Escreve a linha modificada no .csv
             # csv_parsed.write(f'{line}\n')
             writer.writerow(line_for_csv)
             
@@ -189,8 +218,9 @@ with open('tweets.txt') as txt_file:
 
 # Criação do dataframe:
 
-# df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
-df = pd.read_csv('./kmeans_manual/3ª Avaliação/2-2-1.csv', sep=';', index_col=0)
+# Lê o .csv do qual deverá ser feito os cálculos
+df = pd.read_csv('tweets.csv', encoding='utf-8', on_bad_lines='skip')
+# df = pd.read_csv('./kmeans_manual/3ª Avaliação/2-2-1.csv', sep=';', index_col=0)
 
 df = df.drop_duplicates()
 # df_csv = df.to_csv('tweets_drop_duplicates.csv')
@@ -238,6 +268,6 @@ df_valorado = df_valorado.sort_values(by=['Valor'])
 df_valorado = df_valorado.reset_index(drop=True)
 print(df_valorado)
 
-# df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
-df_valorado.to_csv('./kmeans_manual/3ª Avaliação/kmeans/2-2-1.csv', sep=';', index=True)
+df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
+# df_valorado.to_csv('./kmeans_manual/3ª Avaliação/kmeans/2-2-1.csv', sep=';', index=True)
 # --------------------
