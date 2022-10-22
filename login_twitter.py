@@ -28,9 +28,10 @@ def busca_avancada(url):
 # --------------------
 
 def gerador_url_diaria(mes):
-    parte1 = "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A"
+    # parte1 = "https://twitter.com/search?q=(elei%C3%A7%C3%A3o%20OR%20elei%C3%A7%C3%B5es%20OR%20presidente%20OR%20candidato%20OR%20candidatos)%20lang%3Apt%20until%3A"
+    parte1 = "https://twitter.com/search?q=(lula%20OR%20bolsonaro)%20lang%3Apt%20until%3A"
     parte2 = "%20since%3A"
-    parte3 = "&src=typed_query"
+    parte3 = "%20-filter%3Alinks%20-filter%3Areplies&src=typed_query"
     numero_do_mes_escolhido = mes
     urls = []
     start = 0
