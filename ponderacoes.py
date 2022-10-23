@@ -2,9 +2,7 @@ import csv
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer, TfidfTransformer
 from sklearn.cluster import KMeans
 import pandas as pd
-import glob
 import os
-import numpy as np
 
 # 0 = Neutro
 # 1 = Positivo
@@ -75,9 +73,13 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
     for index, line in enumerate(lines):
         if (not line.__len__() >= 2):
             lines.pop(index)
+
+    print(len(lines))
         
     # Abre o arquivo onde será salvo um tweet por linha
-    with open('tweets.csv', 'x', newline='', encoding='UTF-8') as csv_parsed:
+    with open('tweets.csv', 'w', encoding='utf-8') as csv_parsed:
+        writer = csv.writer(csv_parsed)
+
         length = len(lines)
         index = 0
         all_lines = ['']
@@ -89,12 +91,21 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
         # Assim, a cada loop, ao ler as próximas 8 linhas, ele define em qual linha o tweet termina, e copia todo esse texto para a string_final (final_line)
         # No final, verifica se todas as linhas atuais estão vazias, e se positivo, encerra o loop.
 
+        umaVez = False
         while (index <= length):
+            if (index >= 2000):
+                break
+            
+            final_line = ''
+            
+            # print(f'index: {index}')
             try:
                 current_line = lines[index].rstrip()
             except Exception as e:
                 # print(f'Error: {e}')
                 current_line = ''
+
+            # print(current_line)
 
             try:
                 next_first_line = lines[index + 1].rstrip()
@@ -138,17 +149,70 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
                 # print(f'Error: {e}')
                 next_seventh_line = ''
 
+            try:
+                next_eighth_line = lines[index + 8].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_eighth_line = ''
+
+            try:
+                next_nineth_line = lines[index + 9].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_nineth_line = ''
+
+            try:
+                next_tenth_line = lines[index + 10].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_tenth_line = ''
+
+            try:
+                next_eleventh_line = lines[index + 11].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_eleventh_line = ''
+
+            try:
+                next_twelfth_line = lines[index + 12].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_twelfth_line = ''
+
+            try:
+                next_thirteenth_line = lines[index + 13].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_thirteenth_line = ''
+
+            try:
+                next_fourteenth_line = lines[index + 14].rstrip()
+            except Exception as e:
+                # print(f'Error: {e}')
+                next_fourteenth_line = ''
+
             final_line = ''
-
-            # print(f'---------current_line----------- {current_line}')
-            # print(f'---------next_first_line----------- {next_first_line}')
-            # print(f'---------next_second_line----------- {next_second_line}')
-            # print(f'---------next_third_line----------- {next_third_line}')
-            # print(f'---------next_fourth_line----------- {next_fourth_line}')
-            # print(f'---------next_fifth_line----------- {next_fifth_line}')
-            # print(f'---------next_sixth_line----------- {next_sixth_line}')
-            # print(f'---------next_seventh_line----------- {next_seventh_line}')
-
+            
+            # if (index >= 600 and umaVez == False):
+            #     if (index == 8000):
+            #         umaVez = True
+                    
+            #     print(f'---------current_line----------- {current_line}')
+            #     print(f'---------next_first_line----------- {next_first_line}')
+            #     print(f'---------next_second_line----------- {next_second_line}')
+            #     print(f'---------next_third_line----------- {next_third_line}')
+            #     print(f'---------next_fourth_line----------- {next_fourth_line}')
+            #     # print(f'---------next_fifth_line----------- {next_fifth_line}')
+            #     # print(f'---------next_sixth_line----------- {next_sixth_line}')
+            #     # print(f'---------next_seventh_line----------- {next_seventh_line}')
+            #     # print(f'---------next_eighth_line----------- {next_eighth_line}')
+            #     # print(f'---------next_nineth_line----------- {next_nineth_line}')
+            #     # print(f'---------next_tenth_line----------- {next_tenth_line}')
+            #     # print(f'---------next_eleventh_line----------- {next_eleventh_line}')
+            #     # print(f'---------next_twelfth_line----------- {next_twelfth_line}')
+            #     # print(f'---------next_thirteenth_line----------- {next_thirteenth_line}')
+            #     # print(f'---------next_fourteenth_line----------- {next_fourteenth_line}')
+            
             if (current_line.endswith(';')):
                 final_line = current_line
                 index = index + 1
@@ -173,6 +237,27 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
             elif (next_seventh_line.endswith(';')):
                 final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line}'
                 index = index + 8
+            elif (next_eighth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line}'
+                index = index + 9
+            elif (next_nineth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line}'
+                index = index + 10
+            elif (next_tenth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line} {next_tenth_line}'
+                index = index + 11
+            elif (next_eleventh_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line} {next_tenth_line} {next_eleventh_line}'
+                index = index + 12
+            elif (next_twelfth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line} {next_tenth_line} {next_eleventh_line} {next_twelfth_line}'
+                index = index + 13
+            elif (next_thirteenth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line} {next_tenth_line} {next_eleventh_line} {next_twelfth_line} {next_thirteenth_line}'
+                index = index + 14
+            elif (next_fourteenth_line.endswith(';')):
+                final_line = f'{current_line} {next_first_line} {next_second_line} {next_third_line} {next_fourth_line} {next_fifth_line} {next_sixth_line} {next_seventh_line} {next_eighth_line} {next_nineth_line} {next_tenth_line} {next_eleventh_line} {next_twelfth_line} {next_thirteenth_line} {next_fourteenth_line}'
+                index = index + 15
 
             if len(final_line) > 2:
                 all_lines.append(f'{final_line}')
@@ -180,7 +265,22 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
             # print(f'final_line: {final_line}')
             # print(f'index: {index}')
 
-            if (final_line == '' and next_first_line == '' and next_second_line == '' and next_third_line == '' and next_fourth_line == '' and next_fifth_line == '' and next_sixth_line == '' and next_seventh_line == ''):
+            if (final_line == '' 
+                and next_first_line == '' 
+                and next_second_line == '' 
+                and next_third_line == '' 
+                and next_fourth_line == '' 
+                and next_fifth_line == '' 
+                and next_sixth_line == '' 
+                and next_seventh_line == ''
+                and next_eighth_line == ''
+                and next_nineth_line == ''
+                and next_tenth_line == ''
+                and next_eleventh_line == ''
+                and next_twelfth_line == ''
+                and next_thirteenth_line == ''
+                and next_fourteenth_line == ''
+            ):
                 break
         # ---- while
         
@@ -191,6 +291,7 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
         writer = csv.writer(csv_parsed)
         
         # Percorre todas as linhas preparadas para salvar no .csv
+        print(f'allLines: {all_lines}')
         for line in all_lines:
             # text_between_double_quotes = find_between(line, '"', '"')
             # if text_between_double_quotes != '':
@@ -212,7 +313,6 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
             # Escreve a linha modificada no .csv
             # csv_parsed.write(f'{line}\n')
             writer.writerow(line_for_csv)
-            print(line_for_csv)
             
             indice += 1
 # --------------------
