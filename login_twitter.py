@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
@@ -13,14 +13,12 @@ service=Service(exe_path)
 browser = webdriver.Firefox(service=service)
 # browser = webdriver.Chrome(service=service)
 
-Meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro"]
-
 def busca_avancada(url):
     try:
         url_busca_avancada = url
         browser.get(url_busca_avancada)
         print("Iniciou a busca avançada")
-        sleep(8)
+        sleep(5)
     except Exception as excpt:
         print(f"Tivemos uma falha: {excpt}")
         browser.quit()
@@ -35,8 +33,16 @@ def gerador_url_diaria(mes):
     numero_do_mes_escolhido = mes
     urls = []
     start = 0
+    data_atual = date.today()
 
-    if (numero_do_mes_escolhido == 2):
+    if (numero_do_mes_escolhido == data_atual.month):
+        start = data_atual.day - 1
+        # if ((numero_do_mes_escolhido == 4) or (numero_do_mes_escolhido == 6) or (numero_do_mes_escolhido == 9) or (numero_do_mes_escolhido == 11)):
+        #     if (data_atual.day <= 30):
+        #         start = data_atual.day - 1
+        #     else:
+        #         start = data_atual.day
+    elif (numero_do_mes_escolhido == 2):
         start = 28
     elif ((numero_do_mes_escolhido == 4) or (numero_do_mes_escolhido == 6) or (numero_do_mes_escolhido == 9) or (numero_do_mes_escolhido == 11)):
         start = 30
@@ -107,7 +113,7 @@ except Exception as excpt:
     exit(1)
 # --------------------
 
-with open('tweets.txt', 'w') as tweets_file:
+with open('tweets.txt', 'a', encoding='utf-8') as tweets_file:
     index = 0
     for url in URLS_Pesquisa:
         busca_avancada(url)
@@ -115,7 +121,7 @@ with open('tweets.txt', 'w') as tweets_file:
         try:
             last_height = 0
             aux = ''
-            for i in range(1, 2):
+            for i in range(1, 4):
                 
                 # SCRAPING
                 try:

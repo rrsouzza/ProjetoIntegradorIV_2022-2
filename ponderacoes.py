@@ -68,7 +68,7 @@ if os.path.exists('tweets.csv'):
 # --------------------
 
 # Abre o arquivo tweets:
-with open('tweets.txt') as txt_file:
+with open('tweets.txt', encoding='utf-8') as txt_file:
     # Lê todas as linhas do .txt dos tweets
     lines = txt_file.readlines()
     # Percorre todas as linhas do .txt e elimina as linhas que não possuem texto
@@ -212,6 +212,7 @@ with open('tweets.txt') as txt_file:
             # Escreve a linha modificada no .csv
             # csv_parsed.write(f'{line}\n')
             writer.writerow(line_for_csv)
+            print(line_for_csv)
             
             indice += 1
 # --------------------
@@ -264,7 +265,7 @@ line_for_csv = kmeans.predict(tf_idf_vectorizer.transform(df.iloc[:, 0]))
 print(line_for_csv)
 
 df_valorado = pd.DataFrame(data = {'Texto': df.iloc[:, 0], 'Valor': line_for_csv})
-df_valorado = df_valorado.sort_values(by=['Valor'])
+# df_valorado = df_valorado.sort_values(by=['Valor'])
 df_valorado = df_valorado.reset_index(drop=True)
 print(df_valorado)
 
