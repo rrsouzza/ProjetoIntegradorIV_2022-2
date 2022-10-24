@@ -291,7 +291,7 @@ with open('tweets.txt', encoding='utf-8') as txt_file:
         writer = csv.writer(csv_parsed)
         
         # Percorre todas as linhas preparadas para salvar no .csv
-        print(f'allLines: {all_lines}')
+        # print(f'allLines: {all_lines}')
         for line in all_lines:
             # text_between_double_quotes = find_between(line, '"', '"')
             # if text_between_double_quotes != '':
@@ -329,16 +329,26 @@ cv = CountVectorizer()
 # --------------------
 
 # Realização do TF:
-word_count_vector = cv.fit_transform(df)
+df_array = []
+for dados in df.to_numpy():
+    for tweet in dados:
+        df_array.append(tweet)
+word_count_vector = cv.fit_transform(df_array)
+tf = word_count_vector.toarray()
+df_tf = pd.DataFrame(data = tf, columns = cv.get_feature_names_out())
+df_tf.to_csv('tf.csv', index=False, sep=';')
 print("TF")
-print(word_count_vector.toarray().sum(axis=0))
+print(tf)
 # --------------------
+
+# PAREI AQUI
 
 # Realização do IDF:
 word_count_vector = cv.fit_transform(df)
 idf_transformer = TfidfTransformer(smooth_idf=True,use_idf=True)
 idf_transformer.fit(word_count_vector)
-idf = pd.DataFrame(idf_transformer.idf_, index=cv.get_feature_names_out(), columns=["IDF"]) 
+# idf = pd.DataFrame(idf_transformer.idf_, index=cv.get_feature_names_out(), columns=["IDF"]) 
+idf = pd.DataFrame(data={'Termos': cv.get_feature_names_out(), 'IDF': idf_transformer.idf_})
 idf.sort_values(by=['IDF'])
 print(idf)
 # --------------------
@@ -348,7 +358,8 @@ count_vector = cv.transform(df)
 tf_idf_vector = idf_transformer.transform(count_vector)
 feature_names = cv.get_feature_names_out()
 first_document_vector = tf_idf_vector[0]
-tfidf = pd.DataFrame(first_document_vector.T.todense(), index=feature_names, columns=["TF-IDF"]) 
+tfidf = pd.DataFrame(first_document_vector.T.todense(), index=feature_names, columns=["TF-IDF"])
+# tfidf = pd.DataFrame(data={'Termos': feature_names, 'TF-IDF': first_document_vector.T.todense()})
 tfidf.sort_values(by=["TF-IDF"],ascending=False)
 print(tfidf)
 
@@ -372,3 +383,9 @@ print(df_valorado)
 df_valorado.to_csv(checkIfFileExists(), sep=';', index=True)
 # df_valorado.to_csv('./kmeans_manual/3ª Avaliação/kmeans/2-2-1.csv', sep=';', index=True)
 # --------------------
+
+# Exportar Informações
+df_final = pd.DataFrame(data={'Termos': idf['Termos'], 'IDF': idf['IDF'], 'TF-IDF': tfidf['TF-IDF']})
+df_final = df_final.transpose()
+df_final.to_csv('df_final.csv', sep=';', index=False)
+print(df_final)
