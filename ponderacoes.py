@@ -341,7 +341,7 @@ word_count_vector = cv.fit_transform(df_array)
 tf = word_count_vector.toarray()
 df_tf = pd.DataFrame(data = tf, columns = cv.get_feature_names_out())
 df_tf.to_csv('tf.csv', index = False, sep = ';')
-print(f'TF:\n{df_tf}\n\n-------------------')
+ ## print(f'TF:\n{df_tf}\n\n-------------------')
 # --------------------
 
 # Realização do TF-IDF:
@@ -351,14 +351,15 @@ feature_names = tf_idf_vectorizer.get_feature_names_out()
 x_array = X.toarray()
 df_tf_idf = pd.DataFrame(data = x_array, columns = feature_names)
 df_tf_idf.to_csv('tf_idf.csv', index = False, sep = ';')
-print(f'TF-IDF:\n{df_tf_idf}\n\n-------------------')
+## print(f'TF-IDF:\n{df_tf_idf}\n\n-------------------')
 # --------------------
+
 
 # Realização do IDF:
 df_idf = df_tf_idf / df_tf
 df_idf = df_idf.fillna(0)
 df_idf.to_csv('idf.csv', index = False, sep = ';')
-print(f'IDF:\n{df_idf}\n\n-------------------')
+## print(f'IDF:\n{df_idf}\n\n-------------------')
 #--------------------
 
 # K-Means
@@ -367,39 +368,36 @@ kmeans = KMeans(n_clusters=3, random_state=42).fit(X)
 # export_separate_data()
 
 line_for_csv = kmeans.predict(tf_idf_vectorizer.transform(df_array))
-print(f'K-MEANS:\n{line_for_csv}\n\n-------------------')
+## print(f'K-MEANS:\n{line_for_csv}\n\n-------------------')
+
 
 df_valorado = pd.DataFrame(data = {'Texto': df_array, 'Valor': line_for_csv})
 # df_valorado = df_valorado.sort_values(by=['Valor'])
 df_valorado = df_valorado.reset_index(drop=True)
-print(f'df_valorado:\n{df_valorado}\n\n-------------------')
+## print(f'df_valorado:\n{df_valorado}\n\n-------------------')
 
+## print(df_valorado[df_valorado.Valor == 0].sample(5).values)
+## print(df_valorado[df_valorado.Valor == 2].sample(5).values)
 # Exportar os tweets valorados
 df_valorado_classificado = df_valorado
 array_classificacoes = []
 for row in df_valorado_classificado.index:
     if df_valorado_classificado['Valor'][row] == 0:
         array_classificacoes.append('Neutro')
-        # array_classificacoes.append('Positivo')
-        # array_classificacoes.append('Negativo')
     elif df_valorado_classificado['Valor'][row] == 1:
-        # array_classificacoes.append('Neutro')
         array_classificacoes.append('Positivo')
-        # array_classificacoes.append('Negativo')
     elif df_valorado_classificado['Valor'][row] == 2:
-        # array_classificacoes.append('Neutro')
-        # array_classificacoes.append('Positivo')
         array_classificacoes.append('Negativo')
-df_valorado_classificado.insert(2, 'Classificação', array_classificacoes, True)
+
+# df_valorado_classificado.insert(2, 'Classificação', array_classificacoes, True)
+df_valorado_classificado.insert(2, 'Classificação', df_valorado['Valor'], True)
 
 df_valorado.to_csv(checkIfFileExists(), sep = ';', index = True)
 df_valorado_classificado.to_csv('df_valorado_classificado.csv', sep = ';', index = True)
+
+# gerando o TF-IDF com as classificações
+df_tf_idf["classificação"] = df_valorado_classificado.Classificação
+df_tf_idf.to_csv('df_tf_idf_classificado.csv', sep = ';', index = True)
+
 # df_valorado.to_csv('./kmeans_manual/3ª Avaliação/kmeans/2-2-1.csv', sep=';', index=True)
 # --------------------
-
-# Exportar Informações
-# Esse df_final abaixo tá zoado
-# df_final = pd.DataFrame(data={'Termos': df_array, 'IDF': df_idf, 'TF-IDF': df_tf_idf})
-# df_final = df_final.transpose()
-# df_final.to_csv('df_final.csv', sep=';', index=False)
-# print(f'df_final:\n{df_final}\n\n-------------------')
