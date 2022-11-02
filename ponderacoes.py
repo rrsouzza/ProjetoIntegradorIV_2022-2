@@ -363,8 +363,19 @@ df_valorado_classificado.insert(1, 'Classificação', array_classificacoes, allo
 df_valorado_classificado.to_csv('df_valorado_classificado.csv', sep = ';', index = True)
 # --------------------
 
-# Gerando o TF-IDF com as classificações
 df_add_column = pd.DataFrame(data = df.values, columns=['Tweets'])
+
+# Gerando o TF com as classificações
+df_tf_csv = pd.concat([df_add_column, df_tf], axis=1)
+df_tf_csv['Classificação'] = df_valorado_classificado.Classificação
+df_tf_csv.to_csv('df_tf_classificado.csv', sep = ';', index = False)
+
+# Gerando o IDF com as classificações
+df_idf_csv = pd.concat([df_add_column, df_idf], axis=1)
+df_idf_csv['Classificação'] = df_valorado_classificado.Classificação
+df_idf_csv.to_csv('df_idf_classificado.csv', sep = ';', index = False)
+
+# Gerando o TF-IDF com as classificações
 df_tf_idf_csv = pd.concat([df_add_column, df_tf_idf], axis=1)
 # df_tf_idf_csv = df_tf_idf_csv.reset_index()
 # df_tf_idf_csv = df_tf_idf_csv.drop(columns=['index'])
