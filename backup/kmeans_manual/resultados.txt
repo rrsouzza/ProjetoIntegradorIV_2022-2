@@ -1,0 +1,31 @@
+FINAIS:
+
+0-0-0.csv
+0-0-1.csv
+0-0-2.csv
+0-1-0.csv
+0-1-1.csv
+0-1-2.csv
+0-2-0.csv
+0-2-1.csv
+1-0-1.csv
+1-0-2.csv
+1-1-1.csv
+1-1-2.csv
+1-2-0.csv
+1-2-1.csv
+1-2-2.csv
+2-0-0.csv
+2-0-1.csv
+2-0-2.csv
+2-1-0.csv
+2-1-1.csv
+2-1-2.csv
+2-2-1.csv
+
+df_original-0-2.csv --> 2
+df_original-1-0.csv --> 0
+df_original-1-1.csv --> 0
+df_original-2-2.csv --> 0
+df_original-2-2.csv --> 2
+
