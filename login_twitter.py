@@ -1,11 +1,13 @@
 from datetime import date
 from time import sleep
+
+from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
+
 # import csv
 
 exe_path = GeckoDriverManager().install()
@@ -74,7 +76,7 @@ def gerador_url_diaria(mes):
     return urls
 # --------------------
 
-mes_escolhido = 8
+mes_escolhido = 11
 URLS_Pesquisa = gerador_url_diaria(mes_escolhido)
 
 
@@ -113,7 +115,7 @@ except Exception as excpt:
     exit(1)
 # --------------------
 
-with open('tweets.txt', 'a', encoding='utf-8') as tweets_file:
+with open('tweets-novembro.txt', 'a', encoding='utf-8') as tweets_file:
     index = 0
     for url in URLS_Pesquisa:
         busca_avancada(url)

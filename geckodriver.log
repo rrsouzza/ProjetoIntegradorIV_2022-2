@@ -1453,3 +1453,25 @@ DevTools listening on ws://127.0.0.1:49835/devtools/browser/3f8fb834-a682-490c-8
 console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
 1666540627844	Marionette	INFO	Stopped listening on port 49846
 [Parent 35000, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+1669240286116	geckodriver	INFO	Listening on 127.0.0.1:54070
+1669240289125	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "54071" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Ricardo\\AppData\\Local\\Temp\\rust_mozprofile5JBD33"
+1669240289488	Marionette	INFO	Marionette enabled
+1669240289492	Marionette	INFO	Listening on port 54082
+Read port: 54082
+WebDriver BiDi listening on ws://127.0.0.1:54071
+1669240289662	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Ricardo\\AppData\\Local\\Temp\\rust_mozprofile5JBD33\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:54071/devtools/browser/bc869846-373a-4536-af8a-876acf218a57
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+1669240321334	geckodriver	INFO	Listening on 127.0.0.1:54138
+1669240324335	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--remote-debugging-port" "54139" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\Ricardo\\AppData\\Local\\Temp\\rust_mozprofileADKFj1"
+1669240324644	Marionette	INFO	Marionette enabled
+1669240324648	Marionette	INFO	Listening on port 54149
+WebDriver BiDi listening on ws://127.0.0.1:54139
+Read port: 54149
+1669240324852	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\Ricardo\\AppData\\Local\\Temp\\rust_mozprofileADKFj1\\search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:54139/devtools/browser/a8d6a890-778b-43cd-9379-ec60914b9c8c
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://twitter.com."
+1669241373597	Marionette	INFO	Stopped listening on port 54149
+JavaScript error: https://abs.twimg.com/responsive-web/client-web/vendor.53124db9.js, line 74: TypeError: can't access dead object
